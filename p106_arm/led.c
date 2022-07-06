@@ -18,9 +18,9 @@ void led_state(unsigned long data)
 	for(int i = 0; i < 4; i++)
 	{
 		if(data == 1)
-			printk("O");
+			printk("O"); //O
 		else
-			printk("X");
+			printk("X"); //X
 		if(i != 3)
 			printk(":");
 		else
