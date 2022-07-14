@@ -2,6 +2,13 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
+#include <linux/moduleparam.h>
+
+static int ledvalue = 1;
+static char * twostring = NULL;
+
+module_param(ledvalue, int , 0); 
+module_param(twostring ,charp, 0);
 
 #define DEBUG 1
 #define IMX_GPIO_NR(bank, nr)       (((bank) - 1) * 32 + (nr))
@@ -15,9 +22,10 @@ static int led[] = {
 
 void led_state(unsigned long data)
 {
-	for(int i = 0; i < 4; i++)
+	int i = 0;
+	while(i < 4)
 	{
-		if(data == 1)
+		if((data >> i) & 0x01)
 			printk("O");
 		else
 			printk("X");
@@ -25,7 +33,9 @@ void led_state(unsigned long data)
 			printk(":");
 		else
 			printk("\n");
+		i++;
 	}
+}
 
 static int led_init(void)
 {
@@ -93,13 +103,15 @@ void led_read(unsigned long * led_data)
 static int led_on(void)
 {
 	led_init();
-	led_write(0x0f);
+	led_write(ledvalue);
+	led_state(ledvalue);
 	return 0;
 }
 
 static void led_off(void)
 {
 	led_write(0x00);
+	led_state(0x00);
 	led_exit();
 }
 module_init(led_on);

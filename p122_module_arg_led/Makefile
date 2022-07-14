@@ -1,4 +1,4 @@
-MOD := hello
+MOD := led
 obj-m := $(MOD).o
 CROSS = ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
 #KDIR := /lib/modules/$(shell uname -r)/build
